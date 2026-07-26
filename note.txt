@@ -1,0 +1,6 @@
+.venv\Scripts\activate
+
+
+uv run python main.py
+
+

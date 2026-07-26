@@ -1,11 +1,38 @@
-import os
+from langchain_core.prompts import PromptTemplate
+from langchain_ollama import ChatOllama
 
-from dotenv import load_dotenv
-load_dotenv()
 
-def main():
-    gemini_api_key = os.getenv("Gemini_API_Key")
-    print(f"Hello from langchain-course! Your API key is: {gemini_api_key}")
+def main() -> None:
+    prompt = PromptTemplate.from_template(
+        """
+        Answer the following question clearly and concisely:
+
+        {information}
+
+        Include:
+        1. Practical key points.
+        2. One inspirational quote.
+        """.strip()
+    )
+
+    model = ChatOllama(
+        model="gemma4:12b",
+        temperature=0.7,
+    )
+
+    chain = prompt | model
+
+    response = chain.invoke(
+        {
+            "information": (
+                "How can someone reduce weight effectively "
+                "while still satisfying hunger, using only vegan options?"
+            )
+        }
+    )
+
+    print(response.content)
+
 
 if __name__ == "__main__":
     main()
